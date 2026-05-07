@@ -1,0 +1,40 @@
+name: Helm Lint
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - ".github/workflows/helm-lint.yml"
+            - "Makefile"
+            - "charts/**"
+            - "!README.md"
+    pull_request:
+        paths:
+            - ".github/workflows/helm-lint.yml"
+            - "Makefile"
+            - "charts/**"
+            - "!README.md"
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+jobs:
+    helm-lint:
+        name: Helm Lint
+        runs-on: ubuntu-latest
+        steps:
+            # actions/checkout v6.0.2
+            - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+            # Azure/setup-helm v5.0.0
+            - uses: Azure/setup-helm@dda3372f752e03dde6b3237bc9431cdc2f7a02a2
+              with:
+                  version: v3.18.4
+
+            - name: Helm lint
+              run: make lint-helm
