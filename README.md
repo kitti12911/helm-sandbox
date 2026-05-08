@@ -12,3 +12,9 @@ Reusable Helm charts for homelab sandbox applications.
 | `make markdownlint`        | Lint Markdown files                    |
 | `make pretty`              | Format Markdown, YAML, JSON, and JSONC |
 | `make format`              | Run document/config formatting         |
+| `make chart-version`       | Print the selected chart version       |
+| `make bump-chart-patch`    | Bump the selected chart patch version  |
+| `make bump-chart-minor`    | Bump the selected chart minor version  |
+| `make bump-chart-major`    | Bump the selected chart major version  |
+
+Set `CHART=<name>` when running chart version commands.
