@@ -1,10 +1,20 @@
 HELM_CHARTS := $(shell find charts -mindepth 2 -maxdepth 2 -name Chart.yaml -exec dirname {} \; | sort)
 CHART_PATH := charts/$(CHART)
 
-.PHONY: lint lint-helm markdownlint pretty format require-chart chart-version bump-chart-patch bump-chart-minor bump-chart-major
-lint: lint-helm markdownlint
+.PHONY: lint lint-all lint-helm lint-helm-all markdownlint pretty format require-chart chart-version bump-chart-patch bump-chart-minor bump-chart-major
+lint: require-chart lint-helm markdownlint
 
-lint-helm:
+lint-all:
+	@for chart in $(HELM_CHARTS); do \
+		echo "helm lint $${chart}"; \
+		helm lint "$${chart}"; \
+	done
+	markdownlint-cli2
+
+lint-helm: require-chart
+	helm lint "$(CHART_PATH)"
+
+lint-helm-all:
 	@for chart in $(HELM_CHARTS); do \
 		echo "helm lint $${chart}"; \
 		helm lint "$${chart}"; \
@@ -20,7 +30,7 @@ format: pretty
 
 require-chart:
 ifndef CHART
-	$(error CHART is required, for example: make chart-version CHART=grpc-sandbox)
+	$(error CHART is required, for example: make lint CHART=grpc-sandbox)
 endif
 
 chart-version: require-chart
@@ -34,7 +44,3 @@ bump-chart-minor: require-chart
 
 bump-chart-major: require-chart
 	@yq -i '.version = (.version | split(".") | .[0] = ((.[0] | tonumber) + 1 | tostring) | .[1] = "0" | .[2] = "0" | join("."))' "$(CHART_PATH)/Chart.yaml"
-
-.PHONY: lint-grpc-sandbox
-lint-grpc-sandbox:
-	helm lint charts/grpc-sandbox

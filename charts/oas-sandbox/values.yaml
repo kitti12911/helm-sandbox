@@ -1,0 +1,98 @@
+replicaCount: 1
+
+image:
+    repository: zot.lan/kitti12911/oas-sandbox
+    tag: ""
+    digest: ""
+    pullPolicy: IfNotPresent
+
+imagePullSecrets:
+    - name: zot-registry
+
+reloader:
+    enabled: true
+
+podSecurityContext: {}
+
+securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+        drop:
+            - ALL
+    seccompProfile:
+        type: RuntimeDefault
+
+resources:
+    requests:
+        cpu: 50m
+        memory: 64Mi
+    limits:
+        cpu: 250m
+        memory: 256Mi
+
+service:
+    type: ClusterIP
+    port: 8080
+
+configSecret:
+    create: true
+    name: ""
+
+probes:
+    readiness:
+        enabled: true
+        path: /health
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 3
+        failureThreshold: 3
+    liveness:
+        enabled: true
+        path: /health
+        initialDelaySeconds: 15
+        periodSeconds: 20
+        timeoutSeconds: 3
+        failureThreshold: 3
+
+httpRoute:
+    enabled: false
+    hostnames: []
+    parentRefs:
+        - name: traefik
+          namespace: default
+          group: gateway.networking.k8s.io
+          kind: Gateway
+          sectionName: https
+    pathPrefix: /
+    filters: []
+
+config:
+    service:
+        name: oas-sandbox
+        port: 8080
+        shutdown_timeout: 10s
+
+    logging:
+        level: info
+        add_source: false
+        include_trace_id: true
+
+    tracing:
+        enabled: true
+        endpoint: alloy.lan:4317
+        protocol: grpc
+        insecure: false
+        sample_ratio: 1.0
+
+    profiling:
+        enabled: true
+        server_address: https://pyroscope-ingest.lan
+        namespace: oas-sandbox
+        basic_auth_user: ""
+        basic_auth_password: ""
+        tenant_id: ""
+
+    user_service:
+        host: localhost
+        port: 50051
