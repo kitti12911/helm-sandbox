@@ -37,4 +37,4 @@ jobs:
                   version: v3.18.4
 
             - name: Helm lint
-              run: make lint-helm
+              run: make lint-helm-all
