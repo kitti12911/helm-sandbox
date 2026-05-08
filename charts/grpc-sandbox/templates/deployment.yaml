@@ -79,4 +79,10 @@ spec:
             volumes:
                 - name: config
                   secret:
+{{- if .Values.configSecret.name }}
+                      secretName: {{ .Values.configSecret.name }}
+{{- else if .Values.configSecret.create }}
                       secretName: {{ .Release.Name }}-config
+{{- else }}
+{{- fail "configSecret.name is required when configSecret.create is false" }}
+{{- end }}

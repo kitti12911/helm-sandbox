@@ -35,6 +35,10 @@ service:
     type: ClusterIP
     port: 50051
 
+configSecret:
+    create: true
+    name: ""
+
 probes:
     readiness:
         enabled: true
