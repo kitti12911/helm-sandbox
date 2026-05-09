@@ -31,6 +31,14 @@ spec:
             imagePullSecrets:
 {{ toYaml . | indent 16 }}
 {{- end }}
+{{- with .Values.affinity }}
+            affinity:
+{{ toYaml . | indent 16 }}
+{{- end }}
+{{- with .Values.topologySpreadConstraints }}
+            topologySpreadConstraints:
+{{ toYaml . | indent 16 }}
+{{- end }}
             containers:
                 - name: {{ .Chart.Name }}
 {{- if .Values.image.digest }}

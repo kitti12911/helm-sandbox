@@ -33,6 +33,10 @@ resources:
         cpu: 250m
         memory: 256Mi
 
+affinity: {}
+
+topologySpreadConstraints: []
+
 service:
     type: ClusterIP
     port: 8080
@@ -82,19 +86,19 @@ config:
 
     tracing:
         enabled: true
-        endpoint: alloy.lan:4317
+        endpoint: alloy.observability.svc.cluster.local:4317
         protocol: grpc
-        insecure: false
-        sample_ratio: 1.0
+        insecure: true
+        sample_ratio: 0.1
 
     profiling:
         enabled: true
-        server_address: https://pyroscope-ingest.lan
+        server_address: http://pyroscope.observability.svc.cluster.local:4040
         namespace: oas-sandbox
         basic_auth_user: ""
         basic_auth_password: ""
         tenant_id: ""
 
     user_service:
-        host: localhost
+        host: grpc-sandbox.sandbox.svc.cluster.local
         port: 50051
