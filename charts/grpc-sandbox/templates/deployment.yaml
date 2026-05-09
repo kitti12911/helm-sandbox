@@ -41,6 +41,10 @@ spec:
 {{- fail "image.tag or image.digest is required" }}
 {{- end }}
                   imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{- with .Values.env }}
+                  env:
+{{ toYaml . | indent 22 }}
+{{- end }}
 {{- with .Values.securityContext }}
                   securityContext:
 {{ toYaml . | indent 22 }}

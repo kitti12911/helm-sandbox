@@ -2,4 +2,4 @@ apiVersion: v2
 name: grpc-sandbox
 description: Helm chart for the grpc-sandbox service
 type: application
-version: 0.2.0
+version: 0.2.1

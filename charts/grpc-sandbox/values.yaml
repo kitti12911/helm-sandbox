@@ -9,6 +9,8 @@ image:
 imagePullSecrets:
     - name: zot-registry
 
+env: []
+
 reloader:
     enabled: true
 

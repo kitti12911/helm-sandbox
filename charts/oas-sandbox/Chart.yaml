@@ -2,4 +2,4 @@ apiVersion: v2
 name: oas-sandbox
 description: Helm chart for the oas-sandbox service
 type: application
-version: 0.1.0
+version: 0.1.1
