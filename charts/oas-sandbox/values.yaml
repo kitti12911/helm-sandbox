@@ -11,6 +11,10 @@ imagePullSecrets:
 
 env: []
 
+gomemlimit:
+    enabled: true
+    percentage: 80
+
 reloader:
     enabled: true
 
@@ -25,13 +29,7 @@ securityContext:
     seccompProfile:
         type: RuntimeDefault
 
-resources:
-    requests:
-        cpu: 50m
-        memory: 64Mi
-    limits:
-        cpu: 250m
-        memory: 256Mi
+resources: {}
 
 affinity: {}
 

@@ -1,4 +1,9 @@
 {{- $autoscaling := .Values.autoscaling | default dict }}
+{{- $resources := .Values.resources | default dict }}
+{{- $limits := $resources.limits | default dict }}
+{{- $gomemlimit := .Values.gomemlimit | default dict }}
+{{- $gomemlimitEnabled := $gomemlimit.enabled | default false }}
+{{- $memoryLimit := $limits.memory | default "" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,9 +57,15 @@ spec:
 {{- fail "image.tag or image.digest is required" }}
 {{- end }}
                   imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{- with .Values.env }}
+{{- if or .Values.env (and $gomemlimitEnabled $memoryLimit) }}
                   env:
+{{- if and $gomemlimitEnabled $memoryLimit }}
+                      - name: GOMEMLIMIT
+                        value: "{{ include "grpc-sandbox.gomemlimit" (dict "memory" $memoryLimit "percentage" $gomemlimit.percentage) }}"
+{{- end }}
+{{- with .Values.env }}
 {{ toYaml . | indent 22 }}
+{{- end }}
 {{- end }}
 {{- with .Values.securityContext }}
                   securityContext:
@@ -87,7 +98,7 @@ spec:
                         mountPath: /app/config.yml
                         subPath: config.yml
                         readOnly: true
-{{- with .Values.resources }}
+{{- with $resources }}
                   resources:
 {{ toYaml . | indent 22 }}
 {{- end }}
