@@ -81,4 +81,4 @@ config:
             durable_prefix: worker-sandbox
 
     worker:
-        topic: worker-sandbox.jobs
+        topic: worker-sandbox-jobs
