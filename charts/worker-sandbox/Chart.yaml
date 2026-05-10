@@ -1,0 +1,5 @@
+apiVersion: v2
+name: worker-sandbox
+description: Helm chart for the worker-sandbox background worker
+type: application
+version: 0.1.0
