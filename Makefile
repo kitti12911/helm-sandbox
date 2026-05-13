@@ -1,27 +1,29 @@
 HELM_CHARTS := $(shell find charts -mindepth 2 -maxdepth 2 -name Chart.yaml -exec dirname {} \; | sort)
 CHART_PATH := charts/$(CHART)
 
-.PHONY: lint lint-all lint-helm lint-helm-all markdownlint pretty format require-chart chart-version bump-chart-patch bump-chart-minor bump-chart-major
+.PHONY: lint lint-all lint-helm ci-lint-helm lint-helm-all ci-lint-helm-all markdownlint ci-markdownlint pretty format require-chart chart-version bump-chart-patch bump-chart-minor bump-chart-major
 lint: require-chart lint-helm markdownlint
 
 lint-all:
-	@for chart in $(HELM_CHARTS); do \
-		echo "helm lint $${chart}"; \
-		helm lint "$${chart}"; \
-	done
-	markdownlint-cli2
+	$(MAKE) lint-helm-all
+	$(MAKE) markdownlint
 
 lint-helm: require-chart
-	helm lint "$(CHART_PATH)"
+	CHART="$(CHART)" ./scripts/ci/helm-lint.sh
+
+ci-lint-helm: lint-helm
 
 lint-helm-all:
-	@for chart in $(HELM_CHARTS); do \
-		echo "helm lint $${chart}"; \
-		helm lint "$${chart}"; \
-	done
+	./scripts/ci/helm-lint.sh
+
+ci-lint-helm-all:
+	./scripts/ci/helm-lint.sh
 
 markdownlint:
-	markdownlint-cli2
+	./scripts/ci/markdownlint.sh
+
+ci-markdownlint:
+	./scripts/ci/markdownlint.sh
 
 pretty:
 	prettier --write "**/*.{md,markdown,yml,yaml,json,jsonc}"
