@@ -1,0 +1,48 @@
+stages:
+    - lint
+
+workflow:
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+        - if: '$CI_COMMIT_BRANCH == "main"'
+        - when: never
+
+variables:
+    GITLAB_AMD64_RUNNER_TAG: "solution-principle.gitlab-bu8-sd"
+
+markdownlint:
+    stage: lint
+    image: $CI_RELEASE_TOOLCHAIN_IMAGE
+    tags:
+        - $GITLAB_AMD64_RUNNER_TAG
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+          changes: &markdown_changes
+              - ".gitlab-ci.yml"
+              - ".markdownlint-cli2.*"
+              - ".markdownlint.*"
+              - "scripts/ci/markdownlint.sh"
+              - "**/*.md"
+              - "**/*.markdown"
+        - if: '$CI_COMMIT_BRANCH == "main"'
+          changes: *markdown_changes
+    script:
+        - ./scripts/ci/markdownlint.sh
+
+helm:lint:
+    stage: lint
+    image: $CI_HELM_TOOLCHAIN_IMAGE
+    tags:
+        - $GITLAB_AMD64_RUNNER_TAG
+    rules:
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+          changes: &helm_changes
+              - ".gitlab-ci.yml"
+              - ".github/workflows/helm-lint.yml"
+              - "Makefile"
+              - "scripts/ci/helm-lint.sh"
+              - "charts/**"
+        - if: '$CI_COMMIT_BRANCH == "main"'
+          changes: *helm_changes
+    script:
+        - ./scripts/ci/helm-lint.sh
