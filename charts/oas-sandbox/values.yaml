@@ -98,5 +98,5 @@ config:
         tenant_id: ""
 
     user_service:
-        host: grpc-sandbox.sandbox.svc.cluster.local
+        host: grpc-sandbox-headless.sandbox.svc.cluster.local
         port: 50051

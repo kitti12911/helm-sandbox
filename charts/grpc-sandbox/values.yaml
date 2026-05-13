@@ -38,6 +38,9 @@ topologySpreadConstraints: []
 service:
     type: ClusterIP
     port: 50051
+    headless:
+        enabled: true
+        name: ""
 
 configSecret:
     create: true
