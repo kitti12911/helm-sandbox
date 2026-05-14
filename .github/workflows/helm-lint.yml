@@ -30,7 +30,7 @@ jobs:
         name: Helm Lint
         runs-on: ubuntu-latest
         container:
-            image: ${{ vars.TOOLCHAIN_REGISTRY }}/${{ vars.TOOLCHAIN_IMAGE_NAMESPACE }}/helm-toolchain@sha256:8cfadaaea735e97e5223d5f83ee40269f003f14709cc8b07bf907fc528fb475e
+            image: ${{ vars.HELM_TOOLCHAIN_IMAGE }}
             credentials:
                 username: ${{ secrets.TOOLCHAIN_REGISTRY_USERNAME }}
                 password: ${{ secrets.TOOLCHAIN_REGISTRY_PASSWORD }}
