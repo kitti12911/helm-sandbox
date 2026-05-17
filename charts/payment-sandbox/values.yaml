@@ -1,0 +1,99 @@
+replicaCount: 1
+
+image:
+    repository: zot.lan/kitti12911/payment-sandbox
+    tag: ""
+    digest: ""
+    pullPolicy: IfNotPresent
+
+imagePullSecrets:
+    - name: zot-registry
+
+env: []
+
+gomemlimit:
+    enabled: true
+    percentage: 80
+
+reloader:
+    enabled: true
+
+podSecurityContext: {}
+
+securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+        drop:
+            - ALL
+    seccompProfile:
+        type: RuntimeDefault
+
+resources: {}
+
+affinity: {}
+
+topologySpreadConstraints: []
+
+configSecret:
+    create: true
+    name: ""
+
+config:
+    service:
+        name: payment-sandbox
+        shutdown_timeout: 10s
+
+    logging:
+        level: info
+        add_source: false
+        include_trace_id: true
+
+    tracing:
+        enabled: true
+        endpoint: alloy.observability.svc.cluster.local:4317
+        protocol: grpc
+        insecure: true
+        sample_ratio: 0.1
+
+    profiling:
+        enabled: true
+        server_address: http://pyroscope.observability.svc.cluster.local:4040
+        namespace: payment-sandbox
+        basic_auth_user: ""
+        basic_auth_password: ""
+        tenant_id: ""
+
+    database:
+        host: postgresql-rw.database.svc.cluster.local
+        port: "5432"
+        user: example_user
+        password: example_password
+        database: example
+        run_migrations: false
+        run_seeders: false
+        pool:
+            max_conns: 20
+            min_conns: 5
+            max_conn_life_time: 1h
+            max_conn_idle_time: 6h
+
+    nats:
+        url: nats://nats.database.svc.cluster.local:4222
+        username: example_user
+        password: example_password
+        queue_group_prefix: payment-sandbox
+        subscribers_count: 1
+        close_timeout: 30s
+        ack_wait_timeout: 30s
+        subscribe_timeout: 30s
+        jetstream:
+            enabled: true
+            auto_provision: true
+            track_msg_id: true
+            ack_async: false
+            durable_prefix: payment-sandbox
+
+    relay:
+        interval: 2s
+        batch_size: 100

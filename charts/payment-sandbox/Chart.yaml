@@ -1,0 +1,5 @@
+apiVersion: v2
+name: payment-sandbox
+description: Helm chart for the payment-sandbox background worker
+type: application
+version: 0.1.0

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: saga-sandbox
+description: Helm chart for the saga-sandbox service
+type: application
+version: 0.3.0
