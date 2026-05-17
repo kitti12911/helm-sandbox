@@ -100,3 +100,7 @@ config:
     user_service:
         host: grpc-sandbox-headless.sandbox.svc.cluster.local
         port: 50051
+
+    saga_service:
+        host: saga-sandbox-headless.sandbox.svc.cluster.local
+        port: 50051
