@@ -30,12 +30,5 @@ toolchain container instead of duplicating commands in CI YAML:
 | `scripts/ci/helm-lint.sh`    | Lint all charts or `CHART=<name>`     |
 | `scripts/ci/markdownlint.sh` | Run markdownlint-cli2 with pinned npx |
 
-GitHub maps its workflow values to these script inputs. GitLab uses full image
-references so the private mirror can point at Harbor without changing these
-scripts:
-
-| GitLab variable              | Purpose                      |
-| ---------------------------- | ---------------------------- |
-| `CI_HELM_TOOLCHAIN_IMAGE`    | Image for Helm linting       |
-| `CI_RELEASE_TOOLCHAIN_IMAGE` | Image for Markdownlint       |
-| `GITLAB_AMD64_RUNNER_TAG`    | Optional runner tag override |
+The GitHub workflow resolves shared toolchain images through repository
+variables; the scripts themselves are CI-agnostic.
