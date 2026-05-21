@@ -67,6 +67,11 @@ spec:
 {{ toYaml . | indent 22 }}
 {{- end }}
 {{- end }}
+{{- if .Values.secretEnv.enabled }}
+                  envFrom:
+                      - secretRef:
+                            name: {{ default (printf "%s-secrets" .Release.Name) .Values.secretEnv.name }}
+{{- end }}
 {{- with .Values.securityContext }}
                   securityContext:
 {{ toYaml . | indent 22 }}

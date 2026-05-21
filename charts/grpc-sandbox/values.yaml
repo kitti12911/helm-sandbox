@@ -46,6 +46,10 @@ configSecret:
     create: true
     name: ""
 
+secretEnv:
+    enabled: true
+    name: ""
+
 probes:
     readiness:
         enabled: true
@@ -89,8 +93,8 @@ config:
     database:
         host: postgresql-rw.database.svc.cluster.local
         port: "5432"
-        user: example_user
-        password: example_password
+        user: ""
+        password: ""
         database: example
         run_migrations: true
         run_seeders: false
@@ -102,8 +106,8 @@ config:
 
     nats:
         url: nats://nats.database.svc.cluster.local:4222
-        username: example_user
-        password: example_password
+        username: ""
+        password: ""
         queue_group_prefix: grpc-sandbox
         subscribers_count: 1
         close_timeout: 30s
