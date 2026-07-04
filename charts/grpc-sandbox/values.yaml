@@ -1,13 +1,12 @@
 replicaCount: 1
 
 image:
-    repository: zot.lan/kitti12911/grpc-sandbox
+    repository: ghcr.io/kitti12911/grpc-sandbox
     tag: ""
     digest: ""
     pullPolicy: IfNotPresent
 
-imagePullSecrets:
-    - name: zot-registry
+imagePullSecrets: []
 
 env: []
 
